@@ -4,21 +4,134 @@
     <meta charset="UTF-8">
     <title>Ikura raider lol</title>
     <style>
-        body { margin: 0; padding: 0; font-family: 'Consolas', monospace; background: linear-gradient(135deg, #0d0d0d, #1a1a2e); color: #00ffcc; display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
-        .container { background: rgba(0, 0, 0, 0.95); border: 1px solid #00ffcc; padding: 25px; border-radius: 10px; box-shadow: 0 0 20px #00ffcc; width: 100%; max-width: 850px; }
-        h2 { text-align: center; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px; }
-        label { display: block; margin-top: 15px; font-size: 0.8em; color: #00ffcc; }
-        textarea, input, select { width: 100%; padding: 10px; border: 1px solid #00ffcc; background: #000; color: #fff; border-radius: 4px; box-sizing: border-box; outline: none; }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
-        .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0; padding: 10px; border: 1px dashed #00ffcc; }
-        .checkbox-group label { display: flex; align-items: center; margin: 0; cursor: pointer; }
-        input[type="checkbox"] { width: auto; margin-right: 8px; }
-        button { width: 100%; padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
-        .btn-check { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
-        .btn-start { background: #ff0055; color: #fff; font-size: 1.2em; }
-        .btn-stop { background: #555; color: #fff; font-size: 1.2em; }
-        button:hover { filter: brightness(1.3); box-shadow: 0 0 15px currentColor; }
-        #log { margin-top: 20px; height: 150px; overflow-y: auto; background: #000; padding: 10px; font-size: 0.75em; border: 1px solid #333; color: #0f0; }
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Yu Gothic', 'Meiryo', sans-serif;
+          
+            background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+            color: #5d5d5d;
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            padding: 30px;
+            /* 全体的に丸く */
+            border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 850px;
+        }
+        h2 {
+            text-align: center;
+            color: #ff6b6b;
+            letter-spacing: 2px;
+            margin-bottom: 25px;
+            font-weight: bold;
+        }
+        label {
+            display: block;
+            margin-top: 15px;
+            font-size: 0.9em;
+            color: #888;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        textarea, input, select {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ffe3e3;
+            background: #fff;
+            color: #555;
+            
+            border-radius: 20px;
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+        }
+        textarea:focus, input:focus {
+            border-color: #ffb1b1;
+        }
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+        }
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 20px 0;
+            padding: 15px;
+            background: #fff5f5;
+            border-radius: 20px;
+        }
+        .checkbox-group label {
+            display: flex;
+            align-items: center;
+            margin: 0;
+            cursor: pointer;
+            color: #ff8e8e;
+        }
+        input[type="checkbox"] {
+            width: auto;
+            margin-right: 8px;
+            accent-color: #ff6b6b;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+            letter-spacing: 1px;
+        }
+        .btn-check {
+            background: #fff;
+            border: 2px solid #ffb1b1;
+            color: #ffb1b1;
+        }
+        .btn-start {
+            background: linear-gradient(to right, #ff6b6b, #ff8e8e);
+            color: #fff;
+            font-size: 1.1em;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+        .btn-stop {
+            background: #ddd;
+            color: #fff;
+            font-size: 1.1em;
+        }
+        button:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+        button:active {
+            transform: translateY(0);
+        }
+        button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        #log {
+            margin-top: 25px;
+            height: 150px;
+            overflow-y: auto;
+            background: #fff;
+            padding: 15px;
+            font-size: 0.8em;
+            border-radius: 20px;
+            border: 2px solid #fff5f5;
+            color: #777;
+        }
     </style>
 </head>
 <body>
@@ -26,8 +139,8 @@
 <div class="container">
     <h2>Ikura raider</h2>
 
-    <label>Tokens (1 line per token)</label>
-    <textarea id="tokens" placeholder="Enter tokens..."></textarea>
+    <label>Tokens</label>
+    <textarea id="tokens" placeholder="Enter tokens here..."></textarea>
 
     <div class="grid">
         <div>
@@ -39,35 +152,38 @@
             <input type="number" id="delay" value="1000">
         </div>
         <div>
-            <label>Mention Count (per msg)</label>
+            <label>Mention Count</label>
             <input type="number" id="mentionCount" value="1" min="1" max="10">
         </div>
     </div>
 
     <div class="checkbox-group">
-        <label><input type="checkbox" id="enableArabic" checked> Arabic & Emoji Mix</label>
-        <label><input type="checkbox" id="enableMention"> Random Mention</label>
-        <label><input type="checkbox" id="enableReply"> Deep Random Reply</label>
+        <label><input type="checkbox" id="enableArabic" checked> Chaos Mix</label>
+        <label><input type="checkbox" id="enableMention"> Mention</label>
+        <label><input type="checkbox" id="enableReply"> Reply</label>
     </div>
 
-    <label>Target User IDs (Auto-filled)</label>
-    <textarea id="userIds" placeholder="User IDs..."></textarea>
-    <button class="btn-check" onclick="deepScrape()">Deep Scrape (1000 Messages)</button>
+    <label>Target User IDs</label>
+    <textarea id="userIds" placeholder="Scraped IDs..."></textarea>
+    <button class="btn-check" onclick="deepScrape()">DEEP SCRAPE (1000 MSGS)</button>
 
-    <label>Base Messages (Comma separated)</label>
-    <textarea id="messages" placeholder="Hello, Raid, Target..."></textarea>
+    <label>Messages</label>
+    <textarea id="messages" placeholder="msg1, msg2..."></textarea>
 
     <div class="grid">
-        <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
+        <button class="btn-check" onclick="checkTokens()">CHECK TOKENS</button>
         <select id="mode" style="margin-top:10px;">
             <option value="1">Mode 1: Simultaneous</option>
             <option value="2">Mode 2: Sequential</option>
         </select>
     </div>
 
-    <button id="mainBtn" class="btn-start" onclick="toggleRaid()">Start Operation</button>
+    <div class="grid" style="margin-top: 25px;">
+        <button id="startBtn" class="btn-start" onclick="startOperation()">START</button>
+        <button id="stopBtn" class="btn-stop" onclick="stopOperation()" disabled>STOP</button>
+    </div>
 
-    <div id="log">Awaiting command...</div>
+    <div id="log">Ready to go! ✨</div>
 </div>
 
 <script>
@@ -80,13 +196,15 @@
     };
 
     const genChaosString = () => {
-        const ar = "ذرزسشصضطظعغفقكلمنهويابتثجحخد";
+        const ar = "ذرزسشصضطظعغفقكلمنهويابتثجحخد".split('');
         const em = ["🔥", "💀", "💢", "⚡", "⚠️", "🩸", "🏴‍☠️", "☣️", "☢️", "🚫", "🆘", "👺", "👻", "👽", "👾", "🤖", "🦾", "🔪", "🧨", "💣", "🛸", "❓", "🧿", "☄️", "💥", "🌀", "👹", "💎", "⛓️", "💉", "🪦", "⚰️", "🚬", "🥀", "⛓️‍💥", "🔌", "💻", "🕶️", "🎩", "🦿", "🧬", "👁️‍🗨️", "🧠", "🦷", "🕸️", "♟️", "🎱", "🎮", "🃏", "🎴", "🏴", "🚩", "🏁", "✖️", "➕", "💠", "🔱", "➰", "🔘", "🔴", "🔵", "🟣", "⚫", "⚪", "⬛", "⬜", "🔳", "🔲", "🔇", "🔈", "📢", "🚨", "🛡️", "⚔️", "🗡️", "🏹", "🪓", "🔨", "⚒️", "🛠️", "🔧", "🔩", "⚙️", "🗜️", "⚖️", "⛓️", "🔗", "🧪", "🧫", "📡", "🔭", "📡", "🛰️", "🛸", "🌌", "🌑", "🌒", "🌓", "🌔", "🌕", "🌙", "🌘", "🌗", "🌖", "🔮", "🕯️", "🏮", "📜", "🗝️", "🔑", "🔐", "🔓", "🔒", "🔏", "🖋️", "✒️", "📝", "🗑️", "🧿", "📿", "🕋", "⛪", "🏛️", "🗿", "🌋", "🏚️", "🌃", "🌉", "🎭", "🃏", "🎲", "🎰", "🕹️", "🎮", "📺", "🎞️", "📽️", "📷", "📸", "📼", "📀", "💿", "💾", "💻", "⌨️", "🖥️", "🖨️", "🖱️", "🖲️", "📱", "📲", "☎️", "📞", "📟", "📠", "🔋", "🔌", "🔦", "🕯️", "🪔", "🪙", "💸", "💵", "💴", "💶", "💷", "💳", "💎", "⚖️", "🪜", "🧳", "🌂", "🌂", "🎒", "🎓", "🎩", "👓", "🕶️", "🥽", "🥼", "🧤", "🧣", "🧦", "🧥", "👔", "👕", "👖", "👗", "👘", "🥻", "🩱", "🩲", "🩳", "👙", "👜", "👛", "👝", "🎒", "👞", "👟", "🥾", "👡", "👠", "👢", "🩰", "👑", "🧢", "👒", "🎩", "🎓", "💄", "💍", "💼", "🩸", "🩹", "🩺", "🧪", "🧫", "🧬", "🧪", "🌡️", "🧬", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤔", "🧐", "🤨", "😐", "😑", "😶", "🫠", "🤥", "🙄", "😬", "😮‍💨", "🤥", "🫥", "😶‍🌫️", "😏", "😒", "🙄", "😬", "😮‍💨", "🤥", "🫥", "🤡", "👹", "👺", "👻", "💀", "☠️", "👽", "👾", "🤖", "💩", "👿", "😈", "👺", "👹", "💀", "🖤", "🩶", "🤍", "🤎", "❤️‍🔥", "❤️‍🩹", "💔", "❣️", "❌", "⭕", "🛑", "⛔", "🚫", "💢", "⚠️", "🚩", "🏁", "🏴‍☠️", "🔱", "⚜️", "〽️", "⚠️", "🚸", "🔰", "♻️", "✅", "✔️", "☑️", "✖️", "➕", "➖", "➗", "➰", "➿", "〽️", "✳️", "✴️", "❇️", "‼️", "⁉️", "❓", "❔", "❕", "❗", "〰️", "〽️", "⚠️", "🆘", "♨️", "🔕", "🔇", "🔈", "🔇", "🔉", "🔊", "🔔", "🔕", "📣", "📢"];
-        let combined = ar.split('').concat(em);
         let s = "";
-        
-        for(let i=0; i<25; i++) {
-            s += combined[Math.floor(Math.random() * combined.length)];
+        for(let i=0; i<40; i++) {
+            if(Math.random() > 0.5) {
+                s += ar[Math.floor(Math.random() * ar.length)];
+            } else {
+                s += em[Math.floor(Math.random() * em.length)];
+            }
         }
         return s;
     };
@@ -94,47 +212,45 @@
     async function deepScrape() {
         const token = document.getElementById('tokens').value.split('\n')[0].trim();
         const cid = document.getElementById('channelId').value;
-        if(!token || !cid) return alert("Token and Channel ID required");
-
-        logger("Deep Scraping started (target: 1000 msgs)...");
+        if(!token || !cid) return alert("Check Token and Channel ID!");
+        logger("Scraping 1000 messages... 🎀");
         msgHistory = [];
         let lastId = null;
         let uids = new Set();
-
         try {
             for(let i=0; i<20; i++) {
                 const url = `https://discord.com/api/v9/channels/${cid}/messages?limit=50${lastId ? `&before=${lastId}` : ''}`;
                 const r = await fetch(url, { headers: { 'Authorization': token } });
                 const data = await r.json();
-                if(!data.length) break;
-                data.forEach(m => {
-                    msgHistory.push(m.id);
-                    uids.add(m.author.id);
-                });
+                if(!data || !data.length) break;
+                data.forEach(m => { msgHistory.push(m.id); uids.add(m.author.id); });
                 lastId = data[data.length - 1].id;
-                await new Promise(res => setTimeout(res, 250));
+                await new Promise(res => setTimeout(res, 200));
             }
             document.getElementById('userIds').value = Array.from(uids).join(',');
-            logger(`Scraped ${msgHistory.length} messages and ${uids.size} users.`);
-        } catch(e) { logger("Scrape Error: " + e); }
+            logger(`Found ${uids.size} users! 🌸`);
+        } catch(e) { logger("Scrape Error 💧"); }
     }
 
-    function toggleRaid() {
-        const btn = document.getElementById('mainBtn');
-        if (!isRunning) {
-            isRunning = true;
-            btn.innerText = "Stop Operation";
-            btn.className = "btn-stop";
-            startRaid();
-        } else {
-            isRunning = false;
-            btn.innerText = "Start Operation";
-            btn.className = "btn-start";
-            logger("RAID STOPPED.");
-        }
+    function startOperation() {
+        if(isRunning) return;
+        isRunning = true;
+        document.getElementById('startBtn').disabled = true;
+        document.getElementById('stopBtn').disabled = false;
+        document.getElementById('stopBtn').style.background = "#ff6b6b";
+        logger("STARTED! 🚀");
+        runLoop();
     }
 
-    async function startRaid() {
+    function stopOperation() {
+        isRunning = false;
+        document.getElementById('startBtn').disabled = false;
+        document.getElementById('stopBtn').disabled = true;
+        document.getElementById('stopBtn').style.background = "#ddd";
+        logger("STOPPED. 💤");
+    }
+
+    async function runLoop() {
         const tks = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
         const cid = document.getElementById('channelId').value;
         const dly = parseInt(document.getElementById('delay').value);
@@ -143,44 +259,26 @@
         const uids = document.getElementById('userIds').value.split(',').filter(u => u.trim());
         const mCount = parseInt(document.getElementById('mentionCount').value);
 
-        if (!cid || tks.length === 0) {
-            isRunning = false;
-            toggleRaid();
-            return alert("Missing Parameters");
-        }
-
-        logger("RAID STARTED");
-
         while (isRunning) {
             const currentTasks = tks.map(async (t) => {
                 if(!isRunning) return;
-                let base = msgs[Math.floor(Math.random() * msgs.length)].trim();
-                let content = base;
-                
-                if (document.getElementById('enableArabic').checked) {
-                    content += "\n" + genChaosString();
-                }
-                
+                let content = msgs[Math.floor(Math.random() * msgs.length)].trim();
+                if (document.getElementById('enableArabic').checked) content += "\n" + genChaosString();
                 if (document.getElementById('enableMention').checked && uids.length > 0) {
                     content += "\n";
-                    for(let i=0; i < mCount; i++) {
-                        content += `<@${uids[Math.floor(Math.random() * uids.length)].trim()}> `;
-                    }
+                    for(let i=0; i < mCount; i++) content += `<@${uids[Math.floor(Math.random() * uids.length)].trim()}> `;
                 }
-                
                 let body = { content: content };
                 if (document.getElementById('enableReply').checked && msgHistory.length > 0) {
                     body.message_reference = { message_id: msgHistory[Math.floor(Math.random() * msgHistory.length)] };
                 }
-
                 try {
-                    const res = await fetch(`https://discord.com/api/v9/channels/${cid}/messages`, {
+                    await fetch(`https://discord.com/api/v9/channels/${cid}/messages`, {
                         method: 'POST',
                         headers: { 'Authorization': t.trim(), 'Content-Type': 'application/json' },
                         body: JSON.stringify(body)
                     });
-                    if (!res.ok) logger(`Error: ${res.status}`);
-                } catch (e) { logger("Network Error - Ensure CORS extension is ON"); }
+                } catch (e) {}
             });
 
             if (md === "1") {
@@ -201,8 +299,8 @@
         for (const t of tks) {
             try {
                 const r = await fetch('https://discord.com/api/v9/users/@me', { headers: { 'Authorization': t.trim() } });
-                logger(r.ok ? `VALID: ${t.substring(0,10)}` : `DEAD: ${t.substring(0,10)}`);
-            } catch(e) { logger("Check Error: CORS blocked."); }
+                logger(r.ok ? `OK: ${t.substring(0,10)}` : `NG: ${t.substring(0,10)}`);
+            } catch(e) { logger("CORS Error 🚧"); }
         }
     }
 </script>
