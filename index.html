@@ -20,7 +20,7 @@
             background: rgba(255, 255, 255, 0.9);
             border: none;
             padding: 30px;
-            /* 全体的に丸く */
+            
             border-radius: 30px;
             box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
             width: 100%;
@@ -158,20 +158,20 @@
     </div>
 
     <div class="checkbox-group">
-        <label><input type="checkbox" id="enableArabic" checked> Chaos Mix</label>
-        <label><input type="checkbox" id="enableMention"> Mention</label>
-        <label><input type="checkbox" id="enableReply"> Reply</label>
+        <label><input type="checkbox" id="enableArabic" checked> Random String</label>
+        <label><input type="checkbox" id="enableMention"> Random Mention</label>
+        <label><input type="checkbox" id="enableReply"> Random Reply</label>
     </div>
 
     <label>Target User IDs</label>
-    <textarea id="userIds" placeholder="Scraped IDs..."></textarea>
-    <button class="btn-check" onclick="deepScrape()">DEEP SCRAPE (1000 MSGS)</button>
+    <textarea id="userIds" placeholder="User IDs..."></textarea>
+    <button class="btn-check" onclick="deepScrape()">Get User</button>
 
     <label>Messages</label>
-    <textarea id="messages" placeholder="msg1, msg2..."></textarea>
+    <textarea id="messages" placeholder="raid by ikura lol"></textarea>
 
     <div class="grid">
-        <button class="btn-check" onclick="checkTokens()">CHECK TOKENS</button>
+        <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
         <select id="mode" style="margin-top:10px;">
             <option value="1">Mode 1: Simultaneous</option>
             <option value="2">Mode 2: Sequential</option>
@@ -179,11 +179,11 @@
     </div>
 
     <div class="grid" style="margin-top: 25px;">
-        <button id="startBtn" class="btn-start" onclick="startOperation()">START</button>
-        <button id="stopBtn" class="btn-stop" onclick="stopOperation()" disabled>STOP</button>
+        <button id="startBtn" class="btn-start" onclick="startOperation()">Start</button>
+        <button id="stopBtn" class="btn-stop" onclick="stopOperation()" disabled>Stop</button>
     </div>
 
-    <div id="log">Ready to go! ✨</div>
+    <div id="log">ikura raider is ready lol</div>
 </div>
 
 <script>
@@ -213,7 +213,7 @@
         const token = document.getElementById('tokens').value.split('\n')[0].trim();
         const cid = document.getElementById('channelId').value;
         if(!token || !cid) return alert("Check Token and Channel ID!");
-        logger("Scraping 1000 messages... 🎀");
+        logger("Getting Users...");
         msgHistory = [];
         let lastId = null;
         let uids = new Set();
@@ -228,8 +228,8 @@
                 await new Promise(res => setTimeout(res, 200));
             }
             document.getElementById('userIds').value = Array.from(uids).join(',');
-            logger(`Found ${uids.size} users! 🌸`);
-        } catch(e) { logger("Scrape Error 💧"); }
+            logger(`Found ${uids.size} users!`);
+        } catch(e) { logger("Error"); }
     }
 
     function startOperation() {
@@ -238,7 +238,7 @@
         document.getElementById('startBtn').disabled = true;
         document.getElementById('stopBtn').disabled = false;
         document.getElementById('stopBtn').style.background = "#ff6b6b";
-        logger("STARTED! 🚀");
+        logger("Raid started.");
         runLoop();
     }
 
@@ -247,7 +247,7 @@
         document.getElementById('startBtn').disabled = false;
         document.getElementById('stopBtn').disabled = true;
         document.getElementById('stopBtn').style.background = "#ddd";
-        logger("STOPPED. 💤");
+        logger("Raid stopped.");
     }
 
     async function runLoop() {
@@ -300,7 +300,7 @@
             try {
                 const r = await fetch('https://discord.com/api/v9/users/@me', { headers: { 'Authorization': t.trim() } });
                 logger(r.ok ? `OK: ${t.substring(0,10)}` : `NG: ${t.substring(0,10)}`);
-            } catch(e) { logger("CORS Error 🚧"); }
+            } catch(e) { logger("CORS Error"); }
         }
     }
 </script>
