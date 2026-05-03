@@ -2,69 +2,22 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ikura raider lol</title>
     <style>
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', sans-serif;
-            background: radial-gradient(circle at top, #1a1a2e, #16213e, #000);
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding-top: 30px;
-        }
-        .container {
-            background: rgba(0, 0, 0, 0.9);
-            border: 2px solid #00f2ff;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 0 25px #00f2ff;
-            width: 95%;
-            max-width: 800px;
-        }
-        h2 { text-align: center; color: #00f2ff; text-shadow: 0 0 10px #00f2ff; margin-bottom: 20px; }
-        label { display: block; margin: 10px 0 5px; font-size: 0.8em; color: #00f2ff; font-weight: bold; }
-        textarea, input, select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 5px;
-            border: 1px solid #00f2ff;
-            background: #000;
-            color: #fff;
-            box-sizing: border-box;
-            outline: none;
-            font-size: 0.9em;
-        }
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
-        .checkbox-group { display: flex; gap: 15px; margin: 15px 0; background: rgba(0,242,255,0.1); padding: 10px; border-radius: 5px; }
-        .checkbox-group label { display: inline; color: #fff; cursor: pointer; }
-        button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-weight: bold;
-            transition: 0.3s;
-            margin-top: 10px;
-        }
-        .btn-blue { background: #00f2ff; color: #000; }
-        .btn-red { background: #ff0055; color: #fff; margin-top: 20px; }
-        #log {
-            margin-top: 20px;
-            height: 120px;
-            overflow-y: auto;
-            background: #000;
-            padding: 10px;
-            font-size: 0.75em;
-            border-radius: 5px;
-            border: 1px solid #333;
-            color: #0f0;
-            font-family: monospace;
-        }
+        body { margin: 0; padding: 0; font-family: 'Consolas', monospace; background: linear-gradient(135deg, #0d0d0d, #1a1a2e); color: #00ffcc; display: flex; justify-content: center; min-height: 100vh; padding: 20px; }
+        .container { background: rgba(0, 0, 0, 0.95); border: 1px solid #00ffcc; padding: 25px; border-radius: 10px; box-shadow: 0 0 20px #00ffcc; width: 100%; max-width: 850px; }
+        h2 { text-align: center; text-transform: uppercase; letter-spacing: 5px; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; font-size: 0.8em; color: #00ffcc; }
+        textarea, input, select { width: 100%; padding: 10px; border: 1px solid #00ffcc; background: #000; color: #fff; border-radius: 4px; box-sizing: border-box; outline: none; }
+        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; }
+        .checkbox-group { display: flex; flex-wrap: wrap; gap: 15px; margin: 15px 0; padding: 10px; border: 1px dashed #00ffcc; }
+        .checkbox-group label { display: flex; align-items: center; margin: 0; cursor: pointer; }
+        input[type="checkbox"] { width: auto; margin-right: 8px; }
+        button { width: 100%; padding: 15px; border: none; border-radius: 4px; cursor: pointer; font-weight: bold; transition: 0.3s; margin-top: 10px; text-transform: uppercase; }
+        .btn-check { background: transparent; border: 1px solid #00ffcc; color: #00ffcc; }
+        .btn-raid { background: #ff0055; color: #fff; font-size: 1.2em; }
+        button:hover { filter: brightness(1.3); box-shadow: 0 0 15px currentColor; }
+        #log { margin-top: 20px; height: 150px; overflow-y: auto; background: #000; padding: 10px; font-size: 0.75em; border: 1px solid #333; color: #0f0; }
     </style>
 </head>
 <body>
@@ -72,8 +25,8 @@
 <div class="container">
     <h2>Ikura raider</h2>
 
-    <label>Tokens</label>
-    <textarea id="tokens" placeholder="Tokens..."></textarea>
+    <label>Tokens (1 line per token)</label>
+    <textarea id="tokens" placeholder="Enter tokens..."></textarea>
 
     <div class="grid">
         <div>
@@ -84,68 +37,81 @@
             <label>Delay (ms)</label>
             <input type="number" id="delay" value="1000">
         </div>
+        <div>
+            <label>Mention Count (per msg)</label>
+            <input type="number" id="mentionCount" value="1" min="1" max="10">
+        </div>
     </div>
 
     <div class="checkbox-group">
-        <label><input type="checkbox" id="enableArabic"> Random String</label>
-        <label><input type="checkbox" id="enableMention"> Random User Mention</label>
-        <label><input type="checkbox" id="enableReply"> Random Reply Mode</label>
+        <label><input type="checkbox" id="enableArabic" checked> Arabic Long Mix</label>
+        <label><input type="checkbox" id="enableMention"> Random Mention</label>
+        <label><input type="checkbox" id="enableReply"> Deep Random Reply</label>
     </div>
 
-    <label>Target User IDs (Comma separated)</label>
-    <textarea id="userIds" placeholder="Scraped IDs will appear here..."></textarea>
-    <button class="btn-blue" onclick="scrapeUsers()">Extract Active User IDs (Last 100 msgs)</button>
+    <label>Target User IDs (Auto-filled)</label>
+    <textarea id="userIds" placeholder="User IDs..."></textarea>
+    <button class="btn-check" onclick="deepScrape()">Deep Scrape (1000 Messages)</button>
 
-    <label>Messages</label>
-    <textarea id="messages" placeholder="msg1, msg2..."></textarea>
+    <label>Base Messages (Comma separated)</label>
+    <textarea id="messages" placeholder="Hello, Raid, Target..."></textarea>
 
     <div class="grid">
-        <button class="btn-blue" onclick="checkTokens()">Check Tokens</button>
+        <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
         <select id="mode" style="margin-top:10px;">
-            <option value="1">Mode 1 (All at once)</option>
-            <option value="2">Mode 2 (Sequential)</option>
+            <option value="1">Mode 1: Simultaneous</option>
+            <option value="2">Mode 2: Sequential</option>
         </select>
     </div>
 
-    <button class="btn-red" onclick="startRaid()">EXECUTE OPERATION</button>
+    <button class="btn-raid" onclick="startRaid()">Start Operation</button>
 
-    <div id="log">SYSTEM READY...</div>
+    <div id="log">Awaiting command...</div>
 </div>
 
 <script>
     const logger = (m) => {
         const b = document.getElementById('log');
-        b.innerHTML = `<div>> ${m}</div>` + b.innerHTML;
+        b.innerHTML = `<div>[${new Date().toLocaleTimeString()}] ${m}</div>` + b.innerHTML;
     };
 
-    let scrapedMessageIds = [];
+    let msgHistory = [];
 
-    async function scrapeUsers() {
+    async function deepScrape() {
         const token = document.getElementById('tokens').value.split('\n')[0].trim();
         const cid = document.getElementById('channelId').value;
-        if(!token || !cid) return alert("Need at least 1 token and Channel ID");
+        if(!token || !cid) return alert("Token and Channel ID required");
 
-        logger("Scraping users and messages...");
+        logger("Deep Scraping started (target: 1000 msgs)...");
+        msgHistory = [];
+        let lastId = null;
+        let uids = new Set();
+
         try {
-            const r = await fetch(`https://discord.com/api/v9/channels/${cid}/messages?limit=100`, {
-                headers: { 'Authorization': token }
-            });
-            const msgs = await r.json();
-            const uids = [...new Set(msgs.map(m => m.author.id))];
-            scrapedMessageIds = msgs.map(m => m.id);
-            document.getElementById('userIds').value = uids.join(',');
-            logger(`Found ${uids.length} users and ${scrapedMessageIds.length} messages.`);
-        } catch(e) { logger("Scrape Failed (CORS or Invalid Token)"); }
+            for(let i=0; i<20; i++) { // 50 * 20 = 1000
+                const url = `https://discord.com/api/v9/channels/${cid}/messages?limit=50${lastId ? `&before=${lastId}` : ''}`;
+                const r = await fetch(url, { headers: { 'Authorization': token } });
+                const data = await r.json();
+                if(!data.length) break;
+                
+                data.forEach(m => {
+                    msgHistory.push(m.id);
+                    uids.add(m.author.id);
+                });
+                lastId = data[data.length - 1].id;
+                await new Promise(res => setTimeout(res, 200)); // Avoid rate limit
+            }
+            document.getElementById('userIds').value = Array.from(uids).join(',');
+            logger(`Successfully scraped ${msgHistory.length} messages and ${uids.size} users.`);
+        } catch(e) { logger("Scrape Error: " + e); }
     }
 
-    const genArabic = () => {
+    const genArabicLong = () => {
         const ar = "ذرزسشصضطظعغفقكلمنهويابتثجحخد";
-        const em = ["🔥","💀","💢","⚡","⚠️","🩸","🏴‍☠️","☣️","☢️","🚫","🆘",
-"👺","👻","👽","👾","🤖","🦾","🔪","🧨","💣","🛸","❓",
-"🧿","☄️","💥","🌀","👺","👹","🧿","💎","⛓️","🩸","💉"];
+        const em = ["🔥", "💀", "💢", "⚡", "⚠️", "🩸", "🏴‍☠️", "☣️", "☢️", "🚫", "🆘", "👺", "👻", "👽", "👾", "🤖", "🦾", "🔪", "🧨", "💣", "🛸", "❓", "🧿", "☄️", "💥", "🌀", "👹", "💎", "⛓️", "💉", "🪦", "⚰️", "🚬", "🥀", "⛓️‍💥", "🔌", "💻", "🕶️", "🎩", "🦿", "🧬", "👁️‍🗨️", "🧠", "🦷", "🕸️", "♟️", "🎱", "🎮", "🃏", "🎴", "🏴", "🚩", "🏁", "✖️", "➕", "💠", "🔱", "➰", "🔘", "🔴", "🔵", "🟣", "⚫", "⚪", "⬛", "⬜", "🔳", "🔲", "🔇", "🔈", "📢", "🚨", "🛡️", "⚔️", "🗡️", "🏹", "🪓", "🔨", "⚒️", "🛠️", "🔧", "🔩", "⚙️", "🗜️", "⚖️", "⛓️", "🔗", "🧪", "🧫", "📡", "🔭", "📡", "🛰️", "🛸", "🌌", "🌑", "🌒", "🌓", "🌔", "🌕", "🌙", "🌘", "🌗", "🌖", "🔮", "🕯️", "🏮", "📜", "🗝️", "🔑", "🔐", "🔓", "🔒", "🔏", "🖋️", "✒️", "📝", "🗑️", "🧿", "📿", "🕋", "⛪", "🏛️", "🗿", "🌋", "🏚️", "🌃", "🌉", "🎭", "🃏", "🎲", "🎰", "🕹️", "🎮", "📺", "🎞️", "📽️", "📷", "📸", "📼", "📀", "💿", "💾", "💻", "⌨️", "🖥️", "🖨️", "🖱️", "🖲️", "📱", "📲", "☎️", "📞", "📟", "📠", "🔋", "🔌", "🔦", "🕯️", "🪔", "🪙", "💸", "💵", "💴", "💶", "💷", "💳", "💎", "⚖️", "🪜", "🧳", "🌂", "🌂", "🎒", "🎓", "🎩", "👓", "🕶️", "🥽", "🥼", "🧤", "🧣", "🧦", "🧥", "👔", "👕", "👖", "👗", "👘", "🥻", "🩱", "🩲", "🩳", "👙", "👜", "👛", "👝", "🎒", "👞", "👟", "🥾", "👡", "👠", "👢", "🩰", "👑", "🧢", "👒", "🎩", "🎓", "💄", "💍", "💼", "🩸", "🩹", "🩺", "🧪", "🧫", "🧬", "🧪", "🌡️", "🧬", "😠", "😡", "🤬", "🤯", "😳", "🥵", "🥶", "😱", "😨", "😰", "😥", "😓", "🤔", "🧐", "🤨", "😐", "😑", "😶", "🫠", "🤥", "🙄", "😬", "😮‍💨", "🤥", "🫥", "😶‍🌫️", "😏", "😒", "🙄", "😬", "😮‍💨", "🤥", "🫥", "🤡", "👹", "👺", "👻", "💀", "☠️", "👽", "👾", "🤖", "💩", "👿", "😈", "👺", "👹", "💀", "🖤", "🩶", "🤍", "🤎", "❤️‍🔥", "❤️‍🩹", "💔", "❣️", "❌", "⭕", "🛑", "⛔", "🚫", "💢", "⚠️", "🚩", "🏁", "🏴‍☠️", "🔱", "⚜️", "〽️", "⚠️", "🚸", "🔰", "♻️", "✅", "✔️", "☑️", "✖️", "➕", "➖", "➗", "➰", "➿", "〽️", "✳️", "✴️", "❇️", "‼️", "⁉️", "❓", "❔", "❕", "❗", "〰️", "〽️", "⚠️", "🆘", "♨️", "🔕", "🔇", "🔈", "🔇", "🔉", "🔊", "🔔", "🔕", "📣", "📢"];
         let s = "";
-        for(let i=0; i<5; i++) s += ar.charAt(Math.floor(Math.random() * ar.length));
-        s += em[Math.floor(Math.random() * em.length)];
+        for(let i=0; i<24; i++) s += ar.charAt(Math.floor(Math.random() * ar.length));
+        for(let i=0; i<5; i++) s += em[Math.floor(Math.random() * em.length)];
         return s;
     };
 
@@ -155,7 +121,8 @@
         const dly = parseInt(document.getElementById('delay').value);
         const md = document.getElementById('mode').value;
         const msgs = document.getElementById('messages').value.split(',');
-        const uids = document.getElementById('userIds').value.split(',');
+        const uids = document.getElementById('userIds').value.split(',').filter(u => u.trim());
+        const mCount = parseInt(document.getElementById('mentionCount').value);
 
         const conf = {
             arabic: document.getElementById('enableArabic').checked,
@@ -165,13 +132,21 @@
 
         while (true) {
             const tasks = tks.map(async (t) => {
-                let content = msgs[Math.floor(Math.random() * msgs.length)].trim();
-                if (conf.arabic) content += " " + genArabic();
-                if (conf.mention && uids.length > 0) content = `<@${uids[Math.floor(Math.random() * uids.length)].trim()}> ${content}`;
+                let base = msgs[Math.floor(Math.random() * msgs.length)].trim();
+                let content = base;
                 
-                let body = { content: content, tts: false };
-                if (conf.reply && scrapedMessageIds.length > 0) {
-                    body.message_reference = { message_id: scrapedMessageIds[Math.floor(Math.random() * scrapedMessageIds.length)] };
+                if (conf.arabic) content += "\n" + genArabicLong();
+                
+                if (conf.mention && uids.length > 0) {
+                    content += "\n";
+                    for(let i=0; i < mCount; i++) {
+                        content += `<@${uids[Math.floor(Math.random() * uids.length)].trim()}> `;
+                    }
+                }
+                
+                let body = { content: content };
+                if (conf.reply && msgHistory.length > 0) {
+                    body.message_reference = { message_id: msgHistory[Math.floor(Math.random() * msgHistory.length)] };
                 }
 
                 await fetch(`https://discord.com/api/v9/channels/${cid}/messages`, {
@@ -190,7 +165,7 @@
                     await new Promise(r => setTimeout(r, Math.floor(dly / tks.length)));
                 }
             }
-            logger("Cycle sent.");
+            logger(`Cycle executed.`);
         }
     }
 
