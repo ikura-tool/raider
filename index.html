@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Web Raider Interface</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #0f0c29, #302b63, #24243e);
+            color: #ffffff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            width: 90%;
+            max-width: 600px;
+        }
+        h2 { text-align: center; margin-bottom: 25px; letter-spacing: 2px; }
+        .section { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 5px; font-size: 0.9em; color: #ccc; }
+        textarea, input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: none;
+            background: rgba(0, 0, 0, 0.3);
+            color: white;
+            box-sizing: border-box;
+        }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        button {
+            width: 100%;
+            padding: 12px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: 0.3s;
+            margin-top: 10px;
+        }
+        .btn-check { background: #00d2ff; color: white; }
+        .btn-raid { background: #ff416c; color: white; }
+        button:hover { opacity: 0.8; transform: translateY(-2px); }
+        #log {
+            margin-top: 20px;
+            height: 150px;
+            overflow-y: auto;
+            background: rgba(0, 0, 0, 0.5);
+            padding: 10px;
+            font-size: 0.8em;
+            border-radius: 5px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>RAIDER INTERFACE</h2>
+
+    <div class="section">
+        <label>Tokens (1 line per token)</label>
+        <textarea id="tokens" placeholder="PASTE TOKENS HERE"></textarea>
+    </div>
+
+    <div class="grid">
+        <div class="section">
+            <label>Channel ID</label>
+            <input type="text" id="channelId" placeholder="1234567890">
+        </div>
+        <div class="section">
+            <label>Mode</label>
+            <select id="mode">
+                <option value="1">Mode 1: All at once</option>
+                <option value="2">Mode 2: One by one</option>
+            </select>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="section">
+            <label>Delay (ms)</label>
+            <input type="number" id="delay" value="1000">
+        </div>
+        <div class="section">
+            <label>Reaction Emoji</label>
+            <input type="text" id="emoji" placeholder="🔥">
+        </div>
+    </div>
+
+    <div class="section">
+        <label>Messages (Random - Comma separated)</label>
+        <textarea id="messages" placeholder="Hello, Raid, Mention @everyone"></textarea>
+    </div>
+
+    <button class="btn-check" onclick="checkTokens()">CHECK TOKENS</button>
+    <button class="btn-raid" onclick="startRaid()">START RAID / REACTION</button>
+
+    <div id="log">Waiting for action...</div>
+</div>
+
+<script>
+    const log = (msg) => {
+        const logBox = document.getElementById('log');
+        logBox.innerHTML += `<div>[${new Date().toLocaleTimeString()}] ${msg}</div>`;
+        logBox.scrollTop = logBox.scrollHeight;
+    };
+
+    async function checkTokens() {
+        const tokens = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
+        log(`Checking ${tokens.length} tokens...`);
+        for (const token of tokens) {
+            const res = await fetch('https://discord.com/api/v9/users/@me', {
+                headers: { 'Authorization': token.trim() }
+            });
+            log(res.ok ? `VALID: ${token.substring(0, 10)}...` : `INVALID: ${token.substring(0, 10)}...`);
+        }
+    }
+
+    async function startRaid() {
+        const tokens = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
+        const channelId = document.getElementById('channelId').value;
+        const mode = document.getElementById('mode').value;
+        const delay = parseInt(document.getElementById('delay').value);
+        const msgList = document.getElementById('messages').value.split(',');
+        const emoji = document.getElementById('emoji').value;
+
+        if (!channelId) return alert('Input Channel ID');
+
+        log("Raid started.");
+
+        while (true) {
+            if (mode === "1") {
+                await Promise.all(tokens.map(async (t) => {
+                    const content = msgList[Math.floor(Math.random() * msgList.length)].trim();
+                    await executeAction(t.trim(), channelId, content, emoji);
+                }));
+                await new Promise(r => setTimeout(r, delay));
+            } else {
+                for (const t of tokens) {
+                    const content = msgList[Math.floor(Math.random() * msgList.length)].trim();
+                    await executeAction(t.trim(), channelId, content, emoji);
+                }
+                await new Promise(r => setTimeout(r, delay));
+            }
+        }
+    }
+
+    async function executeAction(token, channelId, content, emoji) {
+        try {
+            await fetch(`https://discord.com/api/v9/channels/${channelId}/messages`, {
+                method: 'POST',
+                headers: { 'Authorization': token, 'Content-Type': 'application/json' },
+                body: JSON.stringify({ content: content })
+            });
+            log(`Sent: ${content.substring(0, 10)}...`);
+        } catch (e) {
+            log("Error sending message");
+        }
+    }
+</script>
+
+</body>
+</html>
