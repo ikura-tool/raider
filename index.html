@@ -124,7 +124,7 @@
 <div class="container">
     <h2>Ikura raider</h2>
 
-    <label>Tokens (1 line per token)</label>
+    <label>Tokens</label>
     <textarea id="tokens" placeholder="Enter tokens here..."></textarea>
 
     <div class="grid">
@@ -145,15 +145,15 @@
     <div class="checkbox-group">
         <label><input type="checkbox" id="enableRandomString" checked> Random String</label>
         <label><input type="checkbox" id="enableRandomMention"> Random Mention</label>
-        <label><input type="checkbox" id="enableRandomReply"> Random Reply (History: <span id="historyCount">0</span>)</label>
+        <label><input type="checkbox" id="enableRandomReply"> Random Reply</label>
     </div>
 
-    <label>Target User IDs (comma separated)</label>
+    <label>Target User IDs</label>
     <textarea id="userIds" placeholder="User IDs..."></textarea>
-    <button class="btn-check" onclick="getUser()">Get History & Users (Max 1000)</button>
+    <button class="btn-check" onclick="getUser()">Get User IDs</button>
 
-    <label>Messages (comma separated)</label>
-    <textarea id="messages" placeholder="raid by ikura lol, hello, die"></textarea>
+    <label>Messages</label>
+    <textarea id="messages" placeholder="raid by ikura lol"></textarea>
 
     <div class="grid">
         <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
@@ -208,7 +208,7 @@ return s;
         let uids = new Set();
 
         try {
-            // 50件ずつ20回ループ = 1000件
+            
             for(let i=0; i<20; i++) {
                 const url = `https://discord.com/api/v9/channels/${cid}/messages?limit=50${lastId ? `&before=${lastId}` : ''}`;
                 const r = await fetch(url, { headers: { 'Authorization': token } });
