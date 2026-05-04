@@ -119,19 +119,19 @@
     <button class="btn-check" onclick="getUser()">Get UserIDs & reply log</button>
 
     <label>Messages (Comma separate)</label>
-    <textarea id="messages" placeholder="Hello, Die, Raid, LOL"></textarea>
+    <textarea id="messages" placeholder="Raid by ikura lol, raid by discord.gg/ctkp-aarr"></textarea>
 
     <div class="grid">
         <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
         <select id="mode">
-            <option value="1">Parallel Access</option>
-            <option value="2">Sequential Access</option>
+            <option value="1">Parallel Mode</option>
+            <option value="2">Sequential Mode</option>
         </select>
     </div>
 
     <div class="grid" style="margin-top: 25px;">
-        <button id="startBtn" class="btn-start" onclick="startRaiding()">Execute</button>
-        <button id="stopBtn" class="btn-stop" onclick="stopRaiding()" disabled>Abort</button>
+        <button id="startBtn" class="btn-start" onclick="startRaiding()">Start</button>
+        <button id="stopBtn" class="btn-stop" onclick="stopRaiding()" disabled>Stop</button>
     </div>
 
     <div id="log">ikura raider ready</div>
