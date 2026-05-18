@@ -2,92 +2,130 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>ikura raider lol</title>
+    <title>Tensai-Raider</title>
     <style>
+        
         :root {
-            --bg: #050508;
-            --container-bg: #0d0d16;
+            --bg: #ffffff;
+            --container-bg: #f8f9fa;
+            --text: #212529;
+            --border: #dee2e6;
+            --input-bg: #ffffff;
             --neon-pink: #ff007a;
             --neon-blue: #00f2ff;
-            --neon-green: #39ff14;
-            --text: #c0c0c0;
-            --border: #1f1f33;
+            --neon-green: #28a745;
+            --radius: 12px; 
         }
+
+        
+        [data-theme="dark"] {
+            --bg: #000000;
+            --container-bg: #111111;
+            --text: #e9ecef;
+            --border: #333333;
+            --input-bg: #000000;
+            --neon-green: #39ff14;
+        }
+
         body {
             margin: 0; padding: 20px;
-            font-family: 'Segoe UI', 'Consolas', monospace;
+            font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--bg);
-            background-image: linear-gradient(rgba(10, 10, 20, 0.8) 50%, rgba(0, 0, 0, 0) 50%),
-                              linear-gradient(90deg, rgba(255, 0, 122, 0.05), rgba(0, 242, 255, 0.05));
-            background-size: 100% 4px, 100% 100%;
             color: var(--text);
             display: flex; justify-content: center; min-height: 100vh;
+            transition: background 0.3s, color 0.3s;
         }
+
         .container {
             background: var(--container-bg);
-            border: 2px solid var(--border);
+            border: 1px solid var(--border);
             padding: 30px;
-            border-radius: 5px;
-            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5), 0 0 10px var(--border);
+            border-radius: 20px; 
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             width: 100%; max-width: 900px;
-            position: relative; overflow: hidden;
+            position: relative;
         }
-        .container::before {
-            content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 2px;
-            background: linear-gradient(90deg, transparent, var(--neon-blue), var(--neon-pink), transparent);
+
+        
+        .theme-switch {
+            position: absolute; top: 20px; right: 20px;
+            cursor: pointer; padding: 8px 15px;
+            border-radius: var(--radius);
+            border: 1px solid var(--border);
+            background: var(--input-bg);
+            color: var(--text);
+            font-size: 0.8em; font-weight: bold;
         }
+
         h2 {
             text-align: center; color: var(--neon-blue);
-            text-transform: uppercase; letter-spacing: 8px;
-            text-shadow: 0 0 15px var(--neon-blue); margin-bottom: 30px;
+            text-transform: uppercase; letter-spacing: 4px;
+            margin-bottom: 30px;
         }
+
         label {
             display: block; margin-top: 15px; font-size: 0.75em;
-            color: var(--neon-pink); text-transform: uppercase; letter-spacing: 2px;
+            color: var(--neon-pink); text-transform: uppercase; letter-spacing: 1px;
+            font-weight: bold;
         }
+
         textarea, input, select {
             width: 100%; padding: 12px;
             border: 1px solid var(--border);
-            background: #000; color: #fff;
-            border-radius: 3px; box-sizing: border-box; outline: none;
+            background: var(--input-bg); color: var(--text);
+            border-radius: var(--radius); 
+            box-sizing: border-box; outline: none;
             transition: 0.2s; margin-top: 5px;
         }
-        textarea:focus, input:focus { border-color: var(--neon-blue); box-shadow: 0 0 10px rgba(0, 242, 255, 0.2); }
+
+        textarea:focus, input:focus { 
+            border-color: var(--neon-blue); 
+            box-shadow: 0 0 8px rgba(0, 242, 255, 0.3); 
+        }
+
         .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 15px; }
+
         .checkbox-group {
             display: flex; flex-wrap: wrap; gap: 20px; margin: 20px 0;
-            padding: 15px; background: rgba(0, 0, 0, 0.5); border: 1px solid var(--border);
+            padding: 15px; background: rgba(128, 128, 128, 0.05); 
+            border: 1px solid var(--border); border-radius: var(--radius);
         }
-        .checkbox-group label { display: flex; align-items: center; cursor: pointer; color: #fff; font-size: 0.85em; }
+
+        .checkbox-group label { display: flex; align-items: center; cursor: pointer; color: var(--text); font-size: 0.85em; }
         input[type="checkbox"] { width: auto; margin-right: 10px; accent-color: var(--neon-blue); }
+
         button {
             width: 100%; padding: 15px; border: none; cursor: pointer;
             font-weight: bold; transition: 0.3s; margin-top: 10px;
-            text-transform: uppercase; letter-spacing: 3px;
+            text-transform: uppercase; letter-spacing: 2px;
+            border-radius: var(--radius); 
         }
+
         .btn-check { background: transparent; border: 1px solid var(--neon-pink); color: var(--neon-pink); }
-        .btn-check:hover { background: var(--neon-pink); color: #000; box-shadow: 0 0 20px var(--neon-pink); }
-        .btn-start {
-            background: var(--neon-blue); color: #000;
-            box-shadow: 0 0 15px var(--neon-blue);
-        }
-        .btn-start:hover { background: #fff; box-shadow: 0 0 25px #fff; }
-        .btn-stop { background: #222; color: #555; }
+        .btn-check:hover { background: var(--neon-pink); color: #fff; }
+
+        .btn-start { background: var(--neon-blue); color: #000; }
+        .btn-start:hover { opacity: 0.8; transform: translateY(-1px); }
+
+        .btn-stop { background: #e0e0e0; color: #666; }
+        [data-theme="dark"] .btn-stop { background: #222; color: #555; }
+
         #log {
             margin-top: 25px; height: 250px; overflow-y: auto;
-            background: #000; padding: 15px; font-size: 0.7em;
+            background: var(--input-bg); padding: 15px; font-size: 0.75em;
             border: 1px solid var(--border); color: var(--neon-green);
+            border-radius: var(--radius);
             line-height: 1.6; font-family: 'Consolas', monospace;
         }
-        .log-error { color: #ff0040; text-shadow: 0 0 5px #ff0040; }
+
+        .log-error { color: #ff4d4d; font-weight: bold; }
         .log-success { color: var(--neon-green); }
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-thumb { background: var(--border); }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 10px; }
     </style>
 </head>
-<body>
-
-<div class="container">
+<body data-theme="dark"> <div class="container">
+    <button class="theme-switch" onclick="toggleTheme()">Switch Mode</button>
     <h2>ikura raider</h2>
 
     <label>Access Tokens</label>
@@ -119,7 +157,7 @@
     <button class="btn-check" onclick="getUser()">Get UserIDs & reply log</button>
 
     <label>Messages (Comma separate)</label>
-    <textarea id="messages" placeholder="Raid by ikura lol, raid by discord.gg/ctkp-aarr"></textarea>
+    <textarea id="messages" placeholder="Raid By てんさい Join now!!, medicon on top join now"></textarea>
 
     <div class="grid">
         <button class="btn-check" onclick="checkTokens()">Check Tokens</button>
@@ -134,10 +172,18 @@
         <button id="stopBtn" class="btn-stop" onclick="stopRaiding()" disabled>Stop</button>
     </div>
 
-    <div id="log">ikura raider ready</div>
+    <div id="log">tensai raider ready</div>
 </div>
 
 <script>
+    
+    function toggleTheme() {
+        const body = document.body;
+        const currentTheme = body.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+        body.setAttribute('data-theme', newTheme);
+    }
+
     let isRunning = false;
     let msgHistory = [];
 
@@ -147,39 +193,33 @@
         b.innerHTML = `<div class="${cls}">[${new Date().toLocaleTimeString()}] ${m}</div>` + b.innerHTML;
     };
 
-    // Random String (Emoji)
-    const getRandomEmoji = () => {
-        const emojiRanges = [
-            [0x1F600, 0x1F64F], // Emoticons
-            [0x1F300, 0x1F5FF], // Misc Symbols and Pictographs
-            [0x1F680, 0x1F6FF], // Transport and Map
-            [0x1F900, 0x1F9FF], // Supplemental Symbols and Pictographs
-            [0x2600, 0x26FF],   // Misc Symbols
-            [0x2700, 0x27BF],    // Dingbats
-            [0x25A0, 0x25FF],   // Geometric Shapes 
-            [0x2190, 0x21FF],   // Arrows 
-            [0x2000, 0x206F],   // General Punctuation 
-            [0x2980, 0x29FF],   // Misc Mathematical Symbols-B 
-            [0x2B00, 0x2BFF]    // Misc Symbols and Arrows
-        ];
-        const range = emojiRanges[Math.floor(Math.random() * emojiRanges.length)];
-        const codePoint = Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0];
-        return String.fromCodePoint(codePoint);
-    };
+// Random String (Emoji) - Keep original logic
+const getRandomChar = () => {
+    const charRanges = [
+        [0x0621, 0x064A], [0x3041, 0x3096], [0xAC00, 0xD7A3],
+        [0x3131, 0x314E], [0x4E00, 0x9FFF], [0x0905, 0x093F],
+        [0x0E01, 0x0E2E], [0x0410, 0x044F], [0x0391, 0x03C9],
+        [0x1200, 0x1248], [0x0531, 0x0556], [0x05D0, 0x05EA],
+        [0xFF66, 0xFF9F], [0x0080, 0x00FF], [0x200B, 0x200D],
+        [0xFEFF, 0xFEFF], [0x3099, 0x309A], [0x200E, 0x200F],
+        [0xDB40, 0xDD00],
+        [0x1F600, 0x1F64F], [0x1F300, 0x1F5FF], [0x1F680, 0x1F6FF],
+        [0x1F900, 0x1F9FF], [0x2600, 0x26FF], [0x2700, 0x27BF],
+        [0x25A0, 0x25FF], [0x2190, 0x21FF], [0x2000, 0x206F],
+        [0x2980, 0x29FF], [0x2B00, 0x2BFF]
+    ];
+    const range = charRanges[Math.floor(Math.random() * charRanges.length)];  
+    const codePoint = Math.floor(Math.random() * (range[1] - range[0] + 1)) + range[0];
+    return String.fromCodePoint(codePoint);
+};
 
-    // Random String
-    const genRandomString = () => {
-        const langChars = "ذرزسشصضطظعغفقكلمنهويابتثجحخدあいうえおかきくけこさしすせそたちつてとなにぬねのはひふへほまみむめもやゆよらりるれろわをんㄱㄴㄷㄹㅁㅂㅅㅇㅈㅊㅋㅌㅍㅎ的一是在不了有和人这中大来上个国我到说们為子和對也得而自着下於後小機動生時會以多發能新樣家部分出道行成前所那最和與本理學裡實學物本主用裡樣和說現政正各見問力之進義本題間其經法當起關三定意從性由制已美個表些果明也通力加點去使什利都體五比公此外而長問二位之見其體民社系अ आ इ ई उ ऊ ऋ ए ऐ ओ औ क ख ग घ ङ च छ ज झ ञก ข ค ง จ ฉ ช ซ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น บ ป ผ ฝ พ ฟ ภ ม ย ร ล ว ศ ษ ส ห ฬ อ ฮА Б В Г Д Е Ё Ж З И Й К Л М Н О П Р С Т У Ф Х Ц Ч Ш Щ Ъ Ы Ь Э Ю ЯΑ Β Γ Δ Ε Ζ Η Θ Ι Κ Λ Μ Ν Ξ Ο Π Ρ Σ Τ Υ Φ Χ Ψ Ωሀ ለ ሐ መ ሠ ረ ሰ ሸ ቀ በ ተ ቸ ኀ ነ ኘ አ ከ ወ ዐ ዘ ዠ የ ደ ጀ ገ ጠ ጨ ጰ ጸ ፀ ፈ ፐԱ Բ Գ Դ Ե Զ Է Ը Թ Ժ Ի Լ Խ Ծ Կ Հ Ձ Ղ Ճ Մ Յ Ն Շ Ո Չ Պ Ջ Ռ Ս Վ Տ Ր Ց Ւ Փ Ք Օ Ֆא ב ג ד ה ו ז ח ט י כ ל מ נ ס ע פ צ ק ר ש ת".split('');
-        let s = "";
-        for(let i=0; i<30; i++) {
-            if(Math.random() > 0.19) {
-                s += langChars[Math.floor(Math.random() * langChars.length)];
-            } else {
-                s += getRandomEmoji();
-            }
-        }
-        return s;
-    };
+const genRandomString = (length = 30) => {
+    let s = "";
+    for (let i = 0; i < length; i++) {
+        s += getRandomChar();
+    }
+    return s;
+};
 
     async function getUser() {
         const tks = document.getElementById('tokens').value.split('\n').filter(t => t.trim());
@@ -226,20 +266,13 @@
             const cid = document.getElementById('channelId').value.trim();
             const dly = parseInt(document.getElementById('delay').value) || 1000;
             const msgInput = document.getElementById('messages').value;
-            
             const msgsArray = msgInput.split(',').map(m => m.trim()).filter(m => m !== "");
             
             const tasks = tks.map(async (t) => {
                 if(!isRunning) return;
-
-                let baseMsg = msgsArray.length > 0 
-                    ? msgsArray[Math.floor(Math.random() * msgsArray.length)] 
-                    : "ikura raider";
-
+                let baseMsg = msgsArray.length > 0 ? msgsArray[Math.floor(Math.random() * msgsArray.length)] : "ikura raider";
                 let content = baseMsg;
-                if (document.getElementById('enableRandomString').checked) {
-                    content += `\n${genRandomString()}`;
-                }
+                if (document.getElementById('enableRandomString').checked) content += `\n${genRandomString()}`;
                 
                 if (document.getElementById('enableRandomMention').checked) {
                     const uids = document.getElementById('userIds').value.split(',').map(u => u.trim()).filter(u => u);
@@ -262,16 +295,13 @@
                         headers: { 'Authorization': t.trim(), 'Content-Type': 'application/json' },
                         body: JSON.stringify(body)
                     });
-                    
                     if(res.ok) {
                         logger(`${shortToken} | ${cid} | ${content.substring(0,30).replace(/\n/g," ")}`, "success");
                     } else {
                         const err = await res.json();
                         logger(`ERROR: ${shortToken} | ${res.status} | ${err.message}`, "error");
                     }
-                } catch (e) {
-                    logger(`FATAL: Connection lost for ${shortToken}`, "error");
-                }
+                } catch (e) { logger(`FATAL: Connection lost for ${shortToken}`, "error"); }
             });
 
             if(document.getElementById('mode').value === "1") {
