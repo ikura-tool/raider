@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Tensai-Raider</title>
+    <title>てんさいれいだー</title>
     <style>
         
         :root {
@@ -152,7 +152,7 @@
 
     <label>ゆーざーID(らんだむめんしょん)</label>
     <textarea id="userIds" placeholder="123456789..., 123456789..."></textarea>
-    <button onclick="getUser()">Get UserIDs & reply log</button>
+    <button onclick="getUser()">ゆーざーIDとらんだむりぷらいのろぐを取得</button>
 
     <label>送信するめっせーじ</label>
     <textarea id="messages" placeholder="Raid By てんさい Join now!!, medicon on top join now"></textarea>
@@ -166,11 +166,11 @@
     </div>
 
     <div class="grid" style="margin-top: 25px;">
-        <button id="startBtn" class="btn-start" onclick="startRaiding()">Start</button>
-        <button id="stopBtn" class="btn-stop" onclick="stopRaiding()" disabled>Stop</button>
+        <button id="startBtn" class="btn-start" onclick="startRaiding()">すたーと</button>
+        <button id="stopBtn" class="btn-stop" onclick="stopRaiding()" disabled>すとっぷ</button>
     </div>
 
-    <div id="log">tensai raider ready</div>
+    <div id="log">めいどばいいくら</div>
 </div>
 
 <script>
@@ -223,7 +223,7 @@ const genRandomString = (length = 30) => {
         const cid = document.getElementById('channelId').value.trim();
         if(!tks[0] || !cid) return alert("Configuration Missing.");
         
-        logger("Fetching data...", "success");
+        logger("でーたを取得してます", "success");
         msgHistory = [];
         let uids = new Set();
         try {
@@ -238,15 +238,15 @@ const genRandomString = (length = 30) => {
             });
             document.getElementById('userIds').value = Array.from(uids).join(', ');
             document.getElementById('historyCount').innerText = `(${msgHistory.length})`;
-            logger(`SYNC COMPLETE: ${msgHistory.length} MSGS / ${uids.size} USERS`, "success");
-        } catch(e) { logger("Fetch Failed: Check Token/Permissions", "error"); }
+            logger(`でーた取得成功: ${msgHistory.length} めっせーじ / ${uids.size} ゆーざー`, "success");
+        } catch(e) { logger("でーた取得に失敗しました、権限不足やとーくん無効の可能性があります", "error"); }
     }
 
     function startRaiding() {
         isRunning = true;
         document.getElementById('startBtn').disabled = true;
         document.getElementById('stopBtn').disabled = false;
-        logger("Starting Raid...", "success");
+        logger("れいどがすたーとされました", "success");
         runLoop();
     }
 
@@ -254,7 +254,7 @@ const genRandomString = (length = 30) => {
         isRunning = false;
         document.getElementById('startBtn').disabled = false;
         document.getElementById('stopBtn').disabled = true;
-        logger("Raid Stopped.", "error");
+        logger("れいどがすとっぷされました", "error");
     }
 
     async function runLoop() {
@@ -267,7 +267,7 @@ const genRandomString = (length = 30) => {
             
             const tasks = tks.map(async (t) => {
                 if(!isRunning) return;
-                let baseMsg = msgsArray.length > 0 ? msgsArray[Math.floor(Math.random() * msgsArray.length)] : "ikura raider";
+                let baseMsg = msgsArray.length > 0 ? msgsArray[Math.floor(Math.random() * msgsArray.length)] : "てんさいれいだー";
                 let content = baseMsg;
                 if (document.getElementById('enableRandomString').checked) content += `\n${genRandomString()}`;
                 
@@ -296,9 +296,9 @@ const genRandomString = (length = 30) => {
                         logger(`${shortToken} | ${cid} | ${content.substring(0,30).replace(/\n/g," ")}`, "success");
                     } else {
                         const err = await res.json();
-                        logger(`ERROR: ${shortToken} | ${res.status} | ${err.message}`, "error");
+                        logger(`えらー: ${shortToken} | ${res.status} | ${err.message}`, "error");
                     }
-                } catch (e) { logger(`FATAL: Connection lost for ${shortToken}`, "error"); }
+                } catch (e) { logger(`接続不可: ${shortToken}`, "error"); }
             });
 
             if(document.getElementById('mode').value === "1") {
@@ -319,8 +319,8 @@ const genRandomString = (length = 30) => {
         for (const t of tks) {
             try {
                 const r = await fetch('https://discord.com/api/v9/users/@me', { headers: { 'Authorization': t.trim() } });
-                logger(r.ok ? `VALID: ${t.substring(0,15)}...` : `INVALID: ${t.substring(0,15)}...`, r.ok ? "success" : "error");
-            } catch(e) { logger("Check Erorr", "error"); }
+                logger(r.ok ? `有効: ${t.substring(0,15)}...` : `無効: ${t.substring(0,15)}...`, r.ok ? "success" : "error");
+            } catch(e) { logger("ちぇっくえらー", "error"); }
         }
     }
 </script>
